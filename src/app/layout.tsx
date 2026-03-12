@@ -1,26 +1,36 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, JetBrains_Mono } from 'next/font/google'
+import { JsonLd } from '@/components/JsonLd'
+import { SITE_URL, SITE_NAME, AUTHOR_NAME } from '@/lib/constants'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+})
 
 export const metadata: Metadata = {
-  title: 'Your Name - Frontend Developer & AI Enthusiast',
+  metadataBase: new URL(SITE_URL),
+  title: `${AUTHOR_NAME} - Frontend Developer & AI Enthusiast`,
   description: 'Portfolio of a Frontend Developer with DevOps skills transitioning into AI. Showcasing projects, skills, and insights on the journey to becoming an AI engineer.',
   keywords: ['Frontend Developer', 'DevOps', 'AI', 'Machine Learning', 'React', 'Next.js', 'Portfolio'],
-  authors: [{ name: 'Your Name' }],
-  creator: 'Your Name',
+  authors: [{ name: AUTHOR_NAME }],
+  creator: AUTHOR_NAME,
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://yourdomain.com',
-    title: 'Your Name - Frontend Developer & AI Enthusiast',
+    url: SITE_URL,
+    title: `${AUTHOR_NAME} - Frontend Developer & AI Enthusiast`,
     description: 'Portfolio of a Frontend Developer with DevOps skills transitioning into AI.',
-    siteName: 'Your Name Portfolio',
+    siteName: SITE_NAME,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Your Name - Frontend Developer & AI Enthusiast',
+    title: `${AUTHOR_NAME} - Frontend Developer & AI Enthusiast`,
     description: 'Portfolio of a Frontend Developer with DevOps skills transitioning into AI.',
   },
 }
@@ -31,10 +41,18 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className={`scroll-smooth ${jetbrainsMono.variable}`}>
       <body className={`${inter.className} antialiased bg-white dark:bg-dark-900 text-dark-900 dark:text-white`}>
+        <JsonLd
+          data={{
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: SITE_NAME,
+            url: SITE_URL,
+          }}
+        />
         {children}
       </body>
     </html>
   )
-} 
+}

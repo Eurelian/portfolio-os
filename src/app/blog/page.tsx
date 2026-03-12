@@ -6,6 +6,9 @@ import Footer from '@/components/Footer'
 export const metadata = {
   title: 'Blog - Portfolio',
   description: 'Thoughts on software engineering, AI, DevOps, and building better products.',
+  alternates: {
+    canonical: '/blog',
+  },
 }
 
 export default function BlogPage() {
