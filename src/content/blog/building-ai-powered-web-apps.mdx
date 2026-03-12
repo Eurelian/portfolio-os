@@ -1,0 +1,57 @@
+---
+title: "Building AI-Powered Web Apps"
+slug: "building-ai-powered-web-apps"
+date: "2026-03-10"
+excerpt: "A guide to integrating machine learning models into modern web applications, from API design to real-time inference."
+category: "AI/ML"
+tags: ["AI", "React", "Python", "APIs"]
+coverImage: "/images/blog/ai-web-apps.jpg"
+readingTime: 8
+featured: true
+---
+
+The intersection of artificial intelligence and web development has opened up exciting possibilities for building smarter, more intuitive applications. In this post, I'll walk through the key patterns I've learned while integrating ML models into production web apps.
+
+## Choosing the Right Architecture
+
+When adding AI capabilities to a web app, the first decision is where the model runs. There are three common approaches:
+
+- **Client-side inference** using libraries like TensorFlow.js — great for low-latency, privacy-sensitive tasks like image classification
+- **Server-side API** where your backend wraps a model behind a REST or GraphQL endpoint — ideal for heavier models
+- **Third-party AI APIs** like OpenAI or Anthropic — fastest to ship, but you trade control for convenience
+
+For most projects, I recommend starting with a server-side API. It gives you full control over model versioning, caching, and rate limiting without shipping large model files to the browser.
+
+## Designing the API Layer
+
+A well-designed AI API should feel like any other backend service. Keep these principles in mind:
+
+1. **Use async processing** for long-running inference tasks — return a job ID and let the client poll or use WebSockets
+2. **Cache aggressively** — if the same input produces the same output, store it in Redis
+3. **Set clear timeouts** — ML inference can be unpredictable; always have fallback behavior
+4. **Version your models** — deploy new models behind feature flags so you can roll back safely
+
+## Handling Real-Time Inference
+
+For chat interfaces and streaming responses, Server-Sent Events (SSE) work remarkably well. The pattern is straightforward: the client opens a connection, and the server streams tokens as they're generated.
+
+```typescript
+const response = await fetch('/api/chat', {
+  method: 'POST',
+  body: JSON.stringify({ message }),
+})
+
+const reader = response.body?.getReader()
+const decoder = new TextDecoder()
+
+while (true) {
+  const { done, value } = await reader!.read()
+  if (done) break
+  const chunk = decoder.decode(value)
+  setOutput((prev) => prev + chunk)
+}
+```
+
+## Lessons Learned
+
+After shipping several AI-powered features, the biggest takeaway is this: **focus on the user experience first, model performance second**. A slightly less accurate model with a great UI will always outperform a state-of-the-art model buried behind a confusing interface. Invest in loading states, error handling, and clear feedback loops — your users will thank you.

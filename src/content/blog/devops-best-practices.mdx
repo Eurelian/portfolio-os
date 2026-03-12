@@ -1,0 +1,57 @@
+---
+title: "DevOps Best Practices for Small Teams"
+slug: "devops-best-practices"
+date: "2026-02-20"
+excerpt: "Practical CI/CD and infrastructure strategies that don't require a dedicated platform team."
+category: "DevOps"
+tags: ["DevOps", "Docker", "CI/CD", "Kubernetes"]
+coverImage: "/images/blog/devops-practices.jpg"
+readingTime: 6
+featured: true
+---
+
+You don't need a 10-person platform engineering team to have great DevOps. Over the past few years, I've refined a set of practices that work well for small teams shipping real products. Here's what I've found actually matters.
+
+## Start With a Simple CI Pipeline
+
+Before reaching for Kubernetes or Terraform, make sure you have a solid CI pipeline. At minimum, every push should:
+
+1. **Run linting and type checks** — catch errors before they reach review
+2. **Run the test suite** — unit tests and critical integration tests
+3. **Build the artifact** — confirm the app compiles and bundles correctly
+4. **Deploy to a preview environment** — let reviewers see changes in context
+
+GitHub Actions makes this trivial. A well-structured workflow file is worth more than any fancy deployment platform.
+
+## Containerize Early
+
+Docker isn't just for production. Using containers from day one means:
+
+- **Consistent environments** across dev, CI, and production
+- **Easy onboarding** — new developers run `docker compose up` and they're ready
+- **Predictable deployments** — what runs locally runs the same in production
+
+Keep your Dockerfiles lean. Use multi-stage builds to keep images small, and pin your base image versions to avoid surprise breakages.
+
+## Infrastructure as Code Is Non-Negotiable
+
+Whether you use Terraform, Pulumi, or CDK, your infrastructure should be defined in code and version-controlled. This gives you:
+
+- **Reproducibility** — spin up identical environments for staging and production
+- **Audit trail** — every infrastructure change is a pull request
+- **Disaster recovery** — rebuild your entire stack from a git repo
+
+Start with a single environment definition and parameterize it. Don't over-abstract early.
+
+## Monitoring Before You Need It
+
+The worst time to set up monitoring is during an outage. At minimum, instrument:
+
+- **Application health checks** — a simple `/health` endpoint that verifies database connectivity
+- **Error tracking** — tools like Sentry capture exceptions with full context
+- **Basic metrics** — response times, error rates, and resource utilization
+- **Alerting** — PagerDuty or Opsgenie for critical issues, Slack for warnings
+
+## The 80/20 Rule
+
+Most DevOps value comes from a handful of practices: automated testing, containerization, infrastructure as code, and basic monitoring. Get these right before chasing the latest platform engineering trends. Ship reliably first, optimize later.
