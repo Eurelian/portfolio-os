@@ -1,0 +1,54 @@
+---
+title: "Modern Frontend Architecture in 2026"
+slug: "modern-frontend-architecture"
+date: "2026-01-15"
+excerpt: "How Server Components, edge rendering, and type-safe data fetching are reshaping how we build frontends."
+category: "Frontend"
+tags: ["React", "Next.js", "TypeScript", "Architecture"]
+coverImage: "/images/blog/frontend-arch.jpg"
+readingTime: 7
+featured: false
+---
+
+Frontend architecture has shifted dramatically in the last two years. The rise of React Server Components, edge-first rendering, and full-stack TypeScript has changed how I think about building web applications. Here's a snapshot of what a modern frontend stack looks like in 2026.
+
+## Server Components Changed Everything
+
+React Server Components (RSC) blurred the line between frontend and backend. Components that fetch data can now run entirely on the server, sending only the rendered HTML to the client. This means:
+
+- **Smaller bundles** — server-only code never reaches the browser
+- **Direct data access** — query your database from a component without an API layer
+- **Better performance** — less JavaScript to parse and execute on the client
+
+The mental model takes some adjustment. I think of it as: server components handle data, client components handle interactivity. When in doubt, start with a server component and add `'use client'` only when you need browser APIs or state.
+
+## The Edge Is the New Default
+
+Deploying to edge runtimes (Vercel Edge, Cloudflare Workers, Deno Deploy) puts your code close to users worldwide. For a portfolio or blog site, this means sub-50ms Time to First Byte regardless of where your visitors are.
+
+The tradeoff is a more constrained runtime — no filesystem access, limited Node.js APIs. But for most rendering tasks, these constraints push you toward better architecture: stateless components, external data stores, and cacheable responses.
+
+## Type Safety Across the Stack
+
+TypeScript has won the frontend. But the real power comes from extending type safety beyond component props:
+
+- **Zod** for runtime validation that generates TypeScript types
+- **tRPC or Server Actions** for end-to-end type-safe API calls
+- **Prisma or Drizzle** for type-safe database queries
+- **MDX with typed frontmatter** for content that matches your schema
+
+When every layer shares the same types, entire categories of bugs disappear. Refactoring becomes safe because the compiler catches mismatches instantly.
+
+## CSS in 2026
+
+The CSS landscape has settled around a few clear winners:
+
+- **Tailwind CSS** for utility-first styling — still the fastest way to build consistent UIs
+- **CSS Modules** for component-scoped styles when you need them
+- **Native CSS features** like container queries, `:has()`, and `@layer` have reduced the need for CSS-in-JS
+
+I've moved away from runtime CSS-in-JS entirely. The performance cost isn't worth it when Tailwind and native CSS can handle virtually every use case.
+
+## Keep It Simple
+
+The best frontend architecture is the one your team can understand and maintain. Don't adopt every new pattern — pick the tools that solve real problems in your codebase, and invest in fundamentals like testing, accessibility, and performance. The frameworks will keep changing; good engineering principles won't.
